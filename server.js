@@ -6,6 +6,10 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.get("/", (req, res) => {
+    res.send("Fonnte backend aktif");
+});
+
 app.post("/send", async (req, res) => {
     const {
         game,
@@ -30,23 +34,24 @@ Pembayaran: ${payment}
 `;
 
     try {
-        const response = await fetch("https://api.fonnte.com/send", {
+        await fetch("https://api.fonnte.com/send", {
             method: "POST",
             headers: {
                 "Authorization": process.env.FONNTE_TOKEN
             },
             body: new URLSearchParams({
-                target: "628XXXXXXXXX", // GANTI NOMOR KAMU
+                target: "6283142808857",
                 message
             })
         });
 
-        res.json({ success: true, message: "Pesanan berhasil dikirim!" });
+        res.json({ success: true, message: "Pesanan terkirim" });
     } catch (err) {
-        res.status(500).json({ success: false, message: "Gagal kirim WA" });
+        res.status(500).json({ success: false });
     }
 });
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log("Server jalan");
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log("Server running on port", PORT);
 });
